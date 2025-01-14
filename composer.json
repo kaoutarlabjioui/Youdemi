@@ -1,0 +1,15 @@
+{
+    "name": "youcode/youdemi",
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kaoutarlabjioui",
+            "email": "kalabjioui@gmail.com"
+        }
+    ],
+    "require": {}
+}
