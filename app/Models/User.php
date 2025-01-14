@@ -11,7 +11,7 @@ private string $nom;
 private string $prenom="";
 private string $email="";
 private string $password="";
-private string $status;
+private string $isatctive;
 private Role $role;
 
 
