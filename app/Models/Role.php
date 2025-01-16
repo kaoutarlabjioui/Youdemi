@@ -1,6 +1,6 @@
 <?php
 namespace app\Models;
-
+use app\Config\Database;
 class Role
 {
     private int $id=0;
@@ -71,7 +71,47 @@ class Role
     }
 
 
+    public function create(){
 
+
+        $query="insert into roles (role_name,role_description) values (:role_name,:role_description) ";
+        $stmt= Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':role_name',$this->role_name);
+        $stmt->bindParam(':role_description',$this->role_description);
+        $stmt->execute();
+
+        return  $this->setId(Database::getInstance()
+        ->getConnection()
+        ->lastInsertId());
+    }
+
+    public function findByName($name)
+    {
+        //  $fid=$this->getName();
+        $query="select *  from roles where role_name=:name";
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':name',$name );
+        $stmt->execute();
+
+       $result=$stmt->fetchObject(__CLASS__);
+    return $result;
+    
+      
+    }
+
+    public function findById($name)
+    {
+        //  $fid=$this->getName();
+        $query="select *  from roles where id=:name";
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':name',$name );
+        $stmt->execute();
+
+       $result=$stmt->fetchObject(__CLASS__);
+    return $result;
+    
+      
+    }
 
 }
 
