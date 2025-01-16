@@ -2,6 +2,7 @@
 namespace app\Models;
 
 use app\Config\Database;
+use PDO;
 
 class Cours{
 
@@ -165,6 +166,39 @@ private User $enseignant;
 
 
     }
+
+    public function getAll(){
+
+        $query='select c.*, u.nom, cat.name as catName FROM courses c join users u on c.enseignant_id=u.id join categories cat on c.categorie_id=cat.id';
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt->execute();
+        $cours=$stmt->fetchAll(PDO::FETCH_OBJ);
+     
+        foreach($cours as $cour):
+        $sql2="select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
+        $stmt=Database::getInstance()->getConnection()->prepare($sql2);
+        $stmt->bindParam(':id',$cour->id);
+        $stmt->execute();
+        $cour->Tags=($stmt->fetchAll(PDO::FETCH_OBJ));
+        endforeach;
+        return $cours;
+        
+
+    }
+
+
+     public function getMyCours($id){
+
+            $query = 'select courses.*,categories.name from courses join categories on categories.id = courses.categories_id where courses.enseignant_id=:id';
+            $stmt=Database::getInstance()->getConnection()->prepare($query);
+            $stmt->bindParam(':id',$id);
+             $stmt->execute();
+             return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+
+     }
+
 
 
 

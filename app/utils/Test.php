@@ -56,7 +56,7 @@ class Test
         $ensei = new User();
         $categorie  = new Categorie ;
         $user->setId(7);
-var_dump($user->getId());
+        var_dump($user->getId());
         $categorie->setName("fertz");
         $cour->setCategorie($categorie);
         $cour->setEnseignant($user);

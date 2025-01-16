@@ -137,7 +137,7 @@ private array $cours=[];
     $stmt=Database::getInstance()->getConnection()->prepare($query);
     $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_OBJ,User::class);
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
 
     }
 
@@ -184,11 +184,12 @@ private array $cours=[];
         // $roleId = $this->role ? $this->role->getId() : null;
         $id=$this->role->getId() ;
         $query="insert into users (nom,prenom,email,password,role_id) values (:nom,:prenom,:email,:password,:role_id)";
+        $hashedPassword = password_hash($this->password,PASSWORD_DEFAULT);
         $stmt= Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':nom',$this->nom);
         $stmt->bindParam(':prenom',$this->prenom);
         $stmt->bindParam(':email',$this->email);
-        $stmt->bindParam(':password',$this->password);
+        $stmt->bindParam(':password',$hashedPassword);
         $stmt->bindParam(':role_id', $id);
          $stmt->execute();
 
@@ -208,12 +209,11 @@ private array $cours=[];
     }
 
 
-    public function delete()
+    public function delete($id)
     {
-        $deleted_id=$this->getId();
         $query="delete from users where id= :id";
         $stmt=Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':id' ,  $deleted_id);
+        $stmt->bindParam(':id' ,  $id);
          return $stmt->execute();
 
     }

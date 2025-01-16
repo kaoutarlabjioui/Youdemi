@@ -56,7 +56,7 @@
             font-weight: 800;
             letter-spacing: -1px;
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
         }
@@ -234,7 +234,7 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">Youdemy</a>
+            <a href="/Home" class="logo">Youdemy</a>
         </div>
     </nav>
 
@@ -266,11 +266,11 @@
                 Se connecter
             </button>
 
-            <div class="divider">
+            <!-- <div class="divider">
                 <span>ou connectez-vous avec</span>
-            </div>
+            </div> -->
 
-            <div class="social-login">
+            <!-- <div class="social-login">
                 <a href="#" class="social-btn">
                     <i class="fab fa-google"></i>
                     Google
@@ -279,10 +279,10 @@
                     <i class="fab fa-facebook"></i>
                     Facebook
                 </a>
-            </div>
+            </div> -->
 
             <div class="signup-link">
-                Pas encore membre ? <a href="./Signup.php">Inscrivez-vous</a>
+                Pas encore membre ? <a href="./Signup">Inscrivez-vous</a>
             </div>
         </form>
     </div>

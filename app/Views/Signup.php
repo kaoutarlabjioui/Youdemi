@@ -56,7 +56,7 @@
             font-weight: 800;
             letter-spacing: -1px;
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
         }
@@ -155,6 +155,41 @@
         .requirement i {
             font-size: 0.8rem;
         }
+
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            padding-left: 2.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        .input-group.select-group::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            pointer-events: none;
+        }
+
 
         /* Submit Button */
         .btn-submit {
@@ -263,7 +298,35 @@
                 <label for="name">Nom complet</label>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
+                    <input type="text" id="nom" name="nom" placeholder="Entrez votre nom " required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Nom complet</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="prenom" name="prenom" placeholder="Entrez votre prenom " required>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="email">Adresse email</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="role">Rôle</label>
+                <div class="input-group select-group">
+                    <i class="fas fa-user-graduate"></i>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Sélectionnez votre rôle</option>
+                        <option value="etudiant">Étudiant</option>
+                        <option value="enseignant">Enseignant</option>
+                    </select>
                 </div>
             </div>
 
@@ -275,12 +338,14 @@
                 </div>
             </div>
 
+
             <div class="form-group">
                 <label for="password">Mot de passe</label>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" name="password" placeholder="Créez votre mot de passe" required>
                 </div>
+                
                 <div class="password-requirements">
                     <div class="requirement">
                         <i class="fas fa-check-circle" style="color: var(--success)"></i>
@@ -297,7 +362,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit">
+            <button type="submit" class="btn-submit" name = "submit" value = "signup">
                 <i class="fas fa-user-plus"></i>
                 Créer mon compte
             </button>
@@ -318,7 +383,7 @@
             </div>
 
             <div class="login-link">
-                Déjà membre ? <a href="/login">Connectez-vous</a>
+                Déjà membre ? <a href="/Login">Connectez-vous</a>
             </div>
         </form>
     </div>

@@ -80,7 +80,7 @@
             font-weight: 800;
             letter-spacing: -1px;
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -246,7 +246,7 @@
 
         .feature-icon {
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 2rem;
             margin-bottom: 1.5rem;
@@ -254,7 +254,7 @@
 
         .feature-card:hover .feature-icon {
             background: white;
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 

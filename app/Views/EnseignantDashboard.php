@@ -51,7 +51,7 @@
             font-weight: 800;
             letter-spacing: -1px;
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
             padding: 0 2rem;
