@@ -1,68 +1,64 @@
-
 <?php
+
+namespace app\Models;
 
 abstract class Label
 {
-    protected int $id;
+    protected int $id = 0;
     protected string $name;
-    protected string $description;
+    protected string $description = "";
 
-    public function  __construct(){}
+    public function  __construct() {}
 
-    public function __call($name,$arguments)
+    public function __call($name, $arguments)
     {
-        if($name == "construct")
-        {
-            if(count($arguments) == 1)
-            {
-                $this->name=$arguments[0];
+        if ($name == "construct") {
+            if (count($arguments) == 1) {
+                $this->name = $arguments[0];
             }
 
-            if(count($arguments) == 2)
-            {
-                $this->name=$arguments[0];
-                $this->description=$arguments[1];
+            if (count($arguments) == 2) {
+                $this->name = $arguments[0];
+                $this->description = $arguments[1];
             }
         }
     }
 
 
 
-    public function setId(int $id):int
+    public function setId(int $id)
     {
-        return $this->id=$id;
+        $this->id = $id;
     }
 
-    public function setName(string $name):string
+    public function setName(string $name)
     {
-       return  $this->name=$name;
+        $this->name = $name;
     }
 
-    public function setDescription(string $description):string
+    public function setDescription(string $description)
     {
-       return $this->description=$description;
+        $this->description = $description;
     }
 
 
-    public function getId()
+    public function getId(): int
     {
-        $this->id;
+        return  $this->id;
     }
 
-    public function getName()
+    public function getName(): string
     {
-        $this->name;
+        return $this->name;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
-        $this->description;
+        return $this->description;
     }
 
-    public function __toString():string
-    {
-        return "id: " .$this->id. " , name: " .$this->name. " , description: " .$this->description. ".";
-    }
+    // public function __toString(): string
+    // {
+    //     return "id: " . $this->id . " , name: " . $this->name . " , description: " . $this->description . ".";
+    // }
 }
-
-?>

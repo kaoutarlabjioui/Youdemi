@@ -1,7 +1,8 @@
 <?php
 namespace app\Models;
 
-use Categorie;
+use app\Config\Database;
+use PDO;
 
 class Cours{
 
@@ -10,7 +11,7 @@ private string $titre;
 private string $photo;
 private string $description;
 private string $contenu;
-private Categorie $categorie;
+private ?Categorie $categorie;
 private array $tags=[];
 private array $etudiants=[];
 private User $enseignant;
@@ -37,7 +38,7 @@ private User $enseignant;
             {
                 $this->titre=$arguments[0];
                 $this->tags=$arguments[1];
-                $this->categorie=$arguments[2];
+                $this->description=$arguments[2];
             }
 
             if(count($arguments)==4)
@@ -92,6 +93,9 @@ private User $enseignant;
     {
         $this->enseignant=$enseignant;
     }
+    public function setPhoto(string $photo){
+        $this->photo=$photo;
+    }
 
 
     public function getId():int
@@ -143,6 +147,58 @@ private User $enseignant;
                 " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
                 " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
     }
+
+
+
+    public function create(){
+
+        $cate = $this->categorie->searchByName($this->categorie->getname());
+        var_dump($cate->getId());
+        $enseignant=$this->getEnseignant()->getId();
+
+        $query="insert into courses (titre , photo , description,  contenu , categorie_id , enseignant_id ) values (?,?,?,?,?,?)";
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+       // $ens=$this->enseignant->getId();
+        $cate = $this->categorie->searchByName($this->categorie->getname());
+         $cate->getId();
+         $stmt->execute([$this->titre , $this->photo , $this->description , $this->contenu ,$cate->getId(), $enseignant ]);
+
+
+
+    }
+
+    public function getAll(){
+
+        $query='select c.*, u.nom, cat.name as catName FROM courses c join users u on c.enseignant_id=u.id join categories cat on c.categorie_id=cat.id';
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt->execute();
+        $cours=$stmt->fetchAll(PDO::FETCH_OBJ);
+     
+        foreach($cours as $cour):
+        $sql2="select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
+        $stmt=Database::getInstance()->getConnection()->prepare($sql2);
+        $stmt->bindParam(':id',$cour->id);
+        $stmt->execute();
+        $cour->Tags=($stmt->fetchAll(PDO::FETCH_OBJ));
+        endforeach;
+        return $cours;
+        
+
+    }
+
+
+     public function getMyCours($id){
+
+            $query = 'select courses.*,categories.name from courses join categories on categories.id = courses.categories_id where courses.enseignant_id=:id';
+            $stmt=Database::getInstance()->getConnection()->prepare($query);
+            $stmt->bindParam(':id',$id);
+             $stmt->execute();
+             return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+
+     }
+
 
 
 
