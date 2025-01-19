@@ -18,25 +18,49 @@ class UserController{
             include '../app/Views/Home.php';
         }else{
             $role=$_SESSION['role'];
+            // include '../app/Views/AdmineDashboard.php';
+            // include '../app/Views/layout/Admin/UsersTable.php';
             $users=$this->userModel->display();
-            $user=$this->userModel->delete($this->userModel->getId());
             include '../app/Views/AdmineDashboard.php';
             include '../app/Views/layout/Admin/UsersTable.php';
         }
 
     }
 
+    public function update(){
+        if ($_SERVER["REQUEST_METHOD"]) {
+            $this->userModel->setStatus($_POST['status']);
+            $this->userModel->setId($_POST['id']);
+            $this->userModel->updateStatus();
+            header('location:../');
 
-
-    public function display(){
-
-
-      $this->userModel->display();
-
+        }
     }
 
-    public function  delete(){
-        $this->userModel->delete($this->userModel->getId());
+
+    // public function display(){
+
+    //     $role=$_SESSION['role'];
+    //     $users=  $this->userModel->display();
+
+
+    // if( $users){
+    //     header('Location:../../');
+         
+    //    }
+
+    // }
+
+    public function  delete($id){
+      $result=  $this->userModel->delete($id);
+
+       if($result){
+        header('Location:../../');
+            exit();
+       }
+
+
+
     }
 
 

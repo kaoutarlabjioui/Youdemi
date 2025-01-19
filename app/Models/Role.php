@@ -99,12 +99,12 @@ class Role
       
     }
 
-    public function findById($name)
+    public function findById($id)
     {
         //  $fid=$this->getName();
         $query="select *  from roles where id=:name";
         $stmt=Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':name',$name );
+        $stmt->bindParam(':name',$id);
         $stmt->execute();
 
        $result=$stmt->fetchObject(__CLASS__);

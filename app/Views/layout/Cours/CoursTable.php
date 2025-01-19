@@ -1,6 +1,10 @@
+
+
+<?php include 'CoursModal.php'     ?>
+
 <div class="table-container">
             <div class="table-header">
-                <h2 class="table-title">Derniers utilisateurs inscrits</h2>
+                <h2 class="table-title">Les cours</h2>
             </div>
             <table>
                 <thead>
@@ -15,35 +19,30 @@
                 </thead>
                 <tbody>
                 <?php
-                // var_dump($users);
-                foreach ($cours as $cour): ?>
+                foreach ($cours as $cour): 
+                ?>
                     <tr>
-                        <td><?= $cour->titre ?></td>
-                        <td><?= $cour->contenu?></td>
-                        <td><?= $cour->description?></td>
+                        <td><?= $cour->getTitre() ?></td>
+                        <td><?= $cour->getContenu()?></td>
+                        <td><?= $cour->getDescription()?></td>
                         <td><?= $cour->catName?></td>
                         <td><?= $cour->nom?></td>
-                        <td><span class="status-badge status-active">Actif</span></td>
+                        <?php if (!empty($cour->getTags())): ?>
+                        <?php   foreach ($cour->getTags() as $tag): ?>
+                        <td><?= $tag->getName()?></td>
+                        <?php endforeach; ?>
+                         <?php else: ?>
+                            <td>Aucun tag</td>
+                        <?php endif; ?>
                         <td>
-                            <button class="action-btn"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn"><i class="fas fa-trash"></i></button>
-                        </td>
+                            <a href="/Cours/update/<?=$cour->getId()?>"    class="action-btn"><i class="fas fa-edit"></i></a>
+                            <a href="/Cours/delete/<?=$cour->getId()?>"  type class="action-btn"><i class="fas fa-trash"></i></a> 
+                        </td> 
                     </tr>
                     <?php endforeach; ?>
-                    <!-- <tr>
-                        <td>Marie Martin</td>
-                        <td>marie.martin@email.com</td>
-                        <td>14 Jan 2024</td>
-                        <td><span class="status-badge status-pending">En attente</span></td>
-                        <td>
-                            <button class="action-btn"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
-        
         <?php
         include "../app/Views/Layout/footer.php";
         ?>

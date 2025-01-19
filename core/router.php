@@ -27,6 +27,8 @@ class Router
 
         if (!empty($uri[0])) {
             $controller = 'app\Controllers\\' . $uri[0] . 'Controller';
+            // var_dump($controller);
+            // die();
             unset($uri[0]);
             if (class_exists($controller)) {
                 $this->controller = $controller;

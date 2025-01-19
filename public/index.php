@@ -7,8 +7,12 @@ use app\Models\User;
 use app\utils\Test;
 
 session_start();
- var_dump($_SESSION['user_id']);
+//  var_dump($_SESSION['user_id']);
+//  var_dump($_SESSION['user']);
+//  var_dump($_SESSION['role']);
 
+
+// session_unset();
 
 // 
 new router();

@@ -1,6 +1,6 @@
 <?php
 namespace app\Models;
-
+use Exception;
 use PDO;
 use app\Config\Database;
 use app\Models\Role;
@@ -13,7 +13,7 @@ private string $nom;
 private string $prenom;
 private string $email;
 private string $password;
-private string $isactive;
+private string  $status;
 private Role $role;
 private array $cours=[];
 
@@ -52,6 +52,7 @@ private array $cours=[];
                 $this->password=$arguments[3];
                 $this->role=$arguments[4];
             }
+            
 
         }
 
@@ -98,6 +99,13 @@ private array $cours=[];
     }
 
 
+    public function setStatus(string $status):void
+    {
+       $this->status = $status;
+   }
+
+
+
     public function getId(): int
     {
         return $this->id;
@@ -124,6 +132,13 @@ private array $cours=[];
     }
 
 
+
+    public function getStatus(): string {
+        return $this->status;
+    }
+
+
+
 //     public function __toString()
 //    {
 //         return "(Utilisateur) => id : " . $this->id . " , nom : " . $this->nom . 
@@ -133,11 +148,11 @@ private array $cours=[];
 
     public function display(){
 
-    $query="select nom , prenom, email, password , role_name, role_description from users join roles on users.role_id = roles.id";
+    $query="select users.id, nom , prenom, email, password, status , role_name, role_description from users join roles on users.role_id = roles.id";
     $stmt=Database::getInstance()->getConnection()->prepare($query);
     $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_OBJ);
+    return $stmt->fetchAll(PDO::FETCH_CLASS , User::class);
 
     }
 
@@ -157,7 +172,7 @@ private array $cours=[];
     public function findByEmail($email)
     {
        
-        $query="select id, nom , prenom, email, password, role_id  from users where email=:email";
+        $query="select nom , prenom, email, password, role_id  from users where email=:email";
         $stmt=Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':email',$email );
           $stmt->execute();
@@ -170,7 +185,7 @@ private array $cours=[];
     public function findByName()
     {
         $fid=$this->getName();
-        $query="select nom , prenom, email, password  from users where id=:id";
+        $query="select id, nom , prenom, email, password  from users where id=:id";
         $stmt=Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':id',$fid );
         return  $stmt->execute();
@@ -180,33 +195,51 @@ private array $cours=[];
 
 
     public function create()
-    {
+    {try{
         // $roleId = $this->role ? $this->role->getId() : null;
         $id=$this->role->getId() ;
         $query="insert into users (nom,prenom,email,password,role_id) values (:nom,:prenom,:email,:password,:role_id)";
-        $hashedPassword = password_hash($this->password,PASSWORD_DEFAULT);
+        // $hashedPassword = password_hash($this->password,PASSWORD_DEFAULT);
         $stmt= Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':nom',$this->nom);
         $stmt->bindParam(':prenom',$this->prenom);
         $stmt->bindParam(':email',$this->email);
-        $stmt->bindParam(':password',$hashedPassword);
+        $stmt->bindParam(':password',$this->password);
         $stmt->bindParam(':role_id', $id);
          $stmt->execute();
+        }catch(Exception $e){
 
+            return "kawtar ";
+        }
     }
+
 
 
 
     public function update(){
     if($this->findById()){
 
-    $query='update users set nom= '.$this->nom.'prenom ='.$this->prenom .'email = '.$this->email.'password = '.$this->password.'"';
+    $query="update users set nom= '".$this->nom. "' , prenom ='".$this->prenom ."' ,email = '" .$this->email. "' ,password = '" .$this->password."' ,role_id = '".$this->role->getRoleNAme();
      $stmt = Database::getInstance()->getConnection()->prepare($query);
      return $stmt->execute();
 
     }
 
     }
+
+
+
+    
+    public function updateStatus(){
+        $status=$this->status;
+       $id=$this->getId();
+        $query="update users set status= ?  where id=?";
+         $stmt = Database::getInstance()->getConnection()->prepare($query);
+         return $stmt->execute([$status ,$id]);
+    
+        
+    
+        }
 
 
     public function delete($id)
@@ -219,20 +252,41 @@ private array $cours=[];
     }
 
     public function login($email , $password){
-    
        $result=$this->findByEmail($email);
        $role=new Role;
        $role=$role->findById($result->role_id);
        $result->setRole($role);
-    //    var_dump($password== $result->password);
-    //    die();
+
         if ($result && $password== $result->password) {
             return $result;
         } else {
             return false;
         }
     }
+     
 
+
+
+    public function inscrireAuCours(Cours $cours) {
+        if ($this->role->getRoleName() !== "Etudiant") {
+            throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
+        }
+
+        $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
+
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+       
+        return $stmt->execute([$this->id, $cours->getId()]);
+
+    }
+
+
+
+    // public function signup(){
+
+    //     return   $this->create();
+
+    // }
 }
 
 
