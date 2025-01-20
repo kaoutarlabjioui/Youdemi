@@ -653,7 +653,7 @@
                         <?php endif; ?>
                     </div>
                 </div>
-                <a href="/cours/details/<?= $cour->getId() ?>" class="course-link">
+                <a href="/Auth/Signup" class="course-link">
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

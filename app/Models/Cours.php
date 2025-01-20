@@ -201,4 +201,18 @@ class Cours
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
+
+
+
+    public function getCoursCount(){
+        $query ="select count(*) as coursCount from courses";
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt ->execute();
+
+        $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+        return $result;
+
+    }
 }

@@ -38,18 +38,11 @@ class UserController{
     }
 
 
-    // public function display(){
-
-    //     $role=$_SESSION['role'];
-    //     $users=  $this->userModel->display();
-
-
-    // if( $users){
-    //     header('Location:../../');
-         
-    //    }
-
-    // }
+//    public function statistics(){
+//     $userCount = $this->userModel->getUserCount();
+//     include '../app/Views/layout/stats.php';
+//     include '../app/Views/AdmineDashboard.php';
+//    }
 
     public function  delete($id){
       $result=  $this->userModel->delete($id);

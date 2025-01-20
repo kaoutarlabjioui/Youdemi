@@ -75,6 +75,18 @@ public function searchByName($searchTerm) {
 
 
 
+public function getTagCount(){
+    $query ="select count(*) as tagCount from tags";
+    $stmt=Database::getInstance()->getConnection()->prepare($query);
+    $stmt ->execute();
+
+    $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+    return $result;
+
+}
+
+
 
 }
 

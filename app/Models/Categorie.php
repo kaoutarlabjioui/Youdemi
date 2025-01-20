@@ -100,5 +100,17 @@ class Categorie extends Label
  }
 
 
+ public function getCategorieCount(){
+    $query ="select count(*) as categorieCount from categories";
+    $stmt=Database::getInstance()->getConnection()->prepare($query);
+    $stmt ->execute();
+
+    $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+    return $result;
+
+}
+
+
 }
 ?>

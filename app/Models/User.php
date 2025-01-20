@@ -8,7 +8,7 @@ use app\Models\Role;
 
 class User {
 
-private int $id;
+private int $id ;
 private string $nom;
 private string $prenom;
 private string $email;
@@ -172,7 +172,7 @@ private array $cours=[];
     public function findByEmail($email)
     {
        
-        $query="select nom , prenom, email, password, role_id  from users where email=:email";
+        $query="select id ,nom , prenom, email, password, role_id  from users where email=:email";
         $stmt=Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':email',$email );
           $stmt->execute();
@@ -206,11 +206,11 @@ private array $cours=[];
         $stmt->bindParam(':email',$this->email);
         $stmt->bindParam(':password',$this->password);
         $stmt->bindParam(':role_id', $id);
-         $stmt->execute();
+       return $stmt->execute();
         }catch(Exception $e){
-
             return "kawtar ";
         }
+
     }
 
 
@@ -232,10 +232,10 @@ private array $cours=[];
     
     public function updateStatus(){
         $status=$this->status;
-       $id=$this->getId();
+       $ids=$this->getId();
         $query="update users set status= ?  where id=?";
          $stmt = Database::getInstance()->getConnection()->prepare($query);
-         return $stmt->execute([$status ,$id]);
+         return $stmt->execute([$status ,$ids]);
     
         
     
@@ -267,26 +267,30 @@ private array $cours=[];
 
 
 
-    public function inscrireAuCours(Cours $cours) {
-        if ($this->role->getRoleName() !== "Etudiant") {
-            throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
-        }
+    // public function inscrireAuCours(Cours $cours) {
+    //     if ($this->role->getRoleName() !== "Etudiant") {
+    //         throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
+    //     }
 
-        $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
+    //     $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
 
-        $stmt = Database::getInstance()->getConnection()->prepare($query);
+    //     $stmt = Database::getInstance()->getConnection()->prepare($query);
        
-        return $stmt->execute([$this->id, $cours->getId()]);
-
-    }
-
-
-
-    // public function signup(){
-
-    //     return   $this->create();
+    //     return $stmt->execute([$this->id, $cours->getId()]);
 
     // }
+
+
+    public function getUserCount(){
+        $query ="select count(*) as userCount from users";
+        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $stmt ->execute();
+
+        $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+        return $result;
+
+    }
 }
 
 

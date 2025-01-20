@@ -6,9 +6,9 @@
                     </div>
                 </div>
                 <div class="stat-title">Utilisateurs totaux</div>
-                <div class="stat-value">1,234</div>
+                <div class="stat-value">   </div>
                 <div class="stat-change">
-                    <i class="fas fa-arrow-up"></i> +12.5%
+                    <i class="fas fa-arrow-up"></i> 
                 </div>
             </div>
 
