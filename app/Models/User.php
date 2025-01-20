@@ -157,6 +157,17 @@ private array $cours=[];
     }
 
 
+    public function getMyStudent($id){
+
+      $query = "select u.* ,c.titre from users u join inscriptions ins on ins.etudiant_id = u.id join courses c on c.id = ins.cours_id where c.enseignant_id = :id order by c.titre ";
+      $stmt = $stmt=Database::getInstance()->getConnection()->prepare($query);  
+      $stmt->bindParam(':id',$id );
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_CLASS , User::class);
+
+    }
+
+
     public function findById()
     {
         $fid=$this->getId();
@@ -230,12 +241,10 @@ private array $cours=[];
 
 
     
-    public function updateStatus(){
-        $status=$this->status;
-       $ids=$this->getId();
-        $query="update users set status= ?  where id=?";
+    public function updateStatus($ids){
+        $query="update users set status='active' where id=?";
          $stmt = Database::getInstance()->getConnection()->prepare($query);
-         return $stmt->execute([$status ,$ids]);
+         return $stmt->execute([$ids]);
     
         
     
@@ -268,11 +277,11 @@ private array $cours=[];
 
 
     public function inscrireAuCours($id,$idC) {
-        if ($this->role->getRoleName() !== "Etudiant") {
+        if ($_SESSION['role']->getId() !== 3) {
             throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
         }
 
-        $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
+        $query=" INSERT INTO inscriptions (etudiant_id, cours_id) VALUES (?, ?)";
 
         $stmt = Database::getInstance()->getConnection()->prepare($query);
        
@@ -286,11 +295,43 @@ private array $cours=[];
         $stmt=Database::getInstance()->getConnection()->prepare($query);
         $stmt ->execute();
 
-        $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+        $result= $stmt->fetch(PDO::FETCH_OBJ);
 
         return $result;
 
     }
+
+
+
+
+    public function getEnseignantCount(){
+
+        $query = "select count(*) as enseignantCount from users where role_id = 2";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt ->execute();
+        $result= $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $result;
+
+
+    }
+
+
+   public function getEnseignantinactive(){
+    $query='select * from users where role_id = 2 And status="inactive"';
+    $stmt = Database::getInstance()->getConnection()->prepare($query);
+    $stmt ->execute();
+    $result= $stmt->fetchAll(PDO::FETCH_CLASS , User::class);
+
+    return $result;
+
+
+   }
+
+
+
+
+
 }
 
 

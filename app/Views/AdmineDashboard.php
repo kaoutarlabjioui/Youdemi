@@ -10,6 +10,6 @@ include "../app/Views/layout/aside.php";
             <?php
             
             include "../app/Views/layout/mainHeader.php";
-            include "../app/Views/layout/stats.php";
+            
             
 ?>

@@ -1,9 +1,9 @@
-<div class="action-buttons">
+<!-- <div class="action-buttons">
 <button class="add-button" onclick="openModal('tagModal')">
                 <i class="fas fa-tags"></i>
                 Ajouter un tag
  </button>
-</div>
+</div> -->
 
  <div id="tagModal" class="modal">
             <div class="modal-content">

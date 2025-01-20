@@ -80,7 +80,7 @@ public function getTagCount(){
     $stmt=Database::getInstance()->getConnection()->prepare($query);
     $stmt ->execute();
 
-    $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+    $result= $stmt->fetch(PDO::FETCH_OBJ );
 
     return $result;
 
