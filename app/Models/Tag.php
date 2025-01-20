@@ -19,23 +19,20 @@ class Tag extends Label
 
     
     public function display(){
-        $query = "select name , description FROM tags ";
+        $query = "select id, name , description FROM tags ";
         $stmt =  Database::getInstance()->getConnection()->prepare($query);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-        if($result){
-            return $result;
-        }
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS , Tag::class);
+       return $result;
     
        }
 
 
   public function create(){
-        $tagnom = $this->getName();
-        $query = 'insert into tags (name) VALUES (name = :name)';
+        $query = 'insert into tags (name , description) VALUES (? ,  ?)';
         $stmt = Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':name',$tagnom);
-        $stmt->execute();
+     
+        $stmt->execute([$this->name, $this->description]);
         if($stmt){
             return true;
         }
@@ -43,16 +40,12 @@ class Tag extends Label
 
    public function update(){
 
-        $upid=$this->getId();
-        $upname = $this->getNAme();
-        $updescription = $this->getDescription();
-        $query = "update tags set name = :name , description = :description where id= :id";
+        $upid=$this->id;
+        $upname = $this->name;
+        $updescription = $this->description;
+        $query = "update tags set name = ? , description = ? where id= ?";
         $stmt =  Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':id',$upid);
-        $stmt->bindParam(':id',$upname);
-        $stmt->bindParam(':id',$updescription);
-        $result=  $stmt->execute();
-
+        $result=  $stmt->execute([$upname ,$updescription,$upid ]);
         if($result){
             return true;
         }
@@ -61,8 +54,7 @@ class Tag extends Label
     }
 
 
-   public function delete() {
-    $deleteid=$this->getId();
+   public function delete($deleteid) {
     $query = "delete from tags where id= :id";
     $stmt =  Database::getInstance()->getConnection()->prepare($query);
     $stmt->bindParam(':id',$deleteid);
@@ -81,6 +73,18 @@ public function searchByName($searchTerm) {
     }
 }
 
+
+
+public function getTagCount(){
+    $query ="select count(*) as tagCount from tags";
+    $stmt=Database::getInstance()->getConnection()->prepare($query);
+    $stmt ->execute();
+
+    $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+    return $result;
+
+}
 
 
 

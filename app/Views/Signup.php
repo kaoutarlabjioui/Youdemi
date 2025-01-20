@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -295,7 +297,7 @@
 
         <form action="./Signup" method="POST">
             <div class="form-group">
-                <label for="name">Nom complet</label>
+                <label for="name">Nom </label>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" id="nom" name="nom" placeholder="Entrez votre nom " required>
@@ -303,7 +305,7 @@
             </div>
 
             <div class="form-group">
-                <label for="name">Nom complet</label>
+                <label for="name">Prenom</label>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" id="prenom" name="prenom" placeholder="Entrez votre prenom " required>
@@ -327,14 +329,6 @@
                         <option value="etudiant">Étudiant</option>
                         <option value="enseignant">Enseignant</option>
                     </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Adresse email</label>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
                 </div>
             </div>
 

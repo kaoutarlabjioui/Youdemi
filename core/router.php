@@ -25,27 +25,29 @@ class Router
         $uri = explode('/', trim($uri, '/'));
 
 
-        if (!empty($uri[0])) {
-            $controller = 'app\Controllers\\' . $uri[0] . 'Controller';
-            unset($uri[0]);
-            if (class_exists($controller)) {
-                $this->controller = $controller;
-            } else {
-                $controller = 'app\Controllers\ErrorController';
-                $this->controller = $controller;
+            if (!empty($uri[0])) {
+                $controller = 'app\Controllers\\' . $uri[0] . 'Controller';
+                // var_dump($controller);
+                // die();
+                unset($uri[0]);
+                if (class_exists($controller)) {
+                    $this->controller = $controller;
+                } else {
+                    $controller = 'app\Controllers\ErrorController';
+                    $this->controller = $controller;
+                }
             }
-        }
 
-        if (isset($uri[1])) {
-            $method = $uri[1];
-            unset($uri[1]);
-            if (method_exists($this->controller, $method)) {
-                $this->method = $method;
-            } else {
-                $controller = 'app\Controllers\ErrorController';
-                $this->controller = $controller;
+            if (isset($uri[1])) {
+                $method = $uri[1];
+                unset($uri[1]);
+                if (method_exists($this->controller, $method)) {
+                    $this->method = $method;
+                } else {
+                    $controller = 'app\Controllers\ErrorController';
+                    $this->controller = $controller;
+                }
             }
-        }
 
         $object = new $this->controller;
 

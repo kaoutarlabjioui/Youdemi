@@ -1,224 +1,229 @@
 <?php
+
 namespace app\Models;
 
 use app\Config\Database;
+use app\Models\Tag;
 use PDO;
 
-class Cours{
+class Cours
+{
 
-private int $id;
-private string $titre;
-private string $photo;
-private string $description;
-private string $contenu;
-private ?Categorie $categorie;
-private array $tags=[];
-private array $etudiants=[];
-private User $enseignant;
+    private int $id;
+    private string $titre;
+    private string $photo;
+    private string $description;
+    private string $contenu;
+    private ?Categorie $categorie;
+    private array $tags = [];
+    private array $etudiants = [];
+    private User $enseignant;
 
 
-    public function __construct(){}
+    public function __construct() {}
 
-    
     public function __call($name, $arguments)
-    {   if($name == "construct"){
-            if(count($arguments)== 1)
-            {
-                $this->titre=$arguments[0];
-                
+    {
+        if ($name == "construct") {
+            if (count($arguments) == 1) {
+                $this->titre = $arguments[0];
             }
 
-            if(count($arguments)==2)
-            {
-                $this->titre=$arguments[0];
-                $this->description=$arguments[1];
+            if (count($arguments) == 2) {
+                $this->titre = $arguments[0];
+                $this->description = $arguments[1];
             }
 
-            if(count($arguments)==3)
-            {
-                $this->titre=$arguments[0];
-                $this->tags=$arguments[1];
-                $this->description=$arguments[2];
+            if (count($arguments) == 3) {
+                $this->titre = $arguments[0];
+                $this->tags = $arguments[1];
+                $this->description = $arguments[2];
             }
 
-            if(count($arguments)==4)
-            {
-                $this->titre=$arguments[0];
-                $this->tags=$arguments[1];
-                $this->categorie=$arguments[2];
-                $this->enseignant=$arguments[3];
+            if (count($arguments) == 4) {
+                $this->titre = $arguments[0];
+                $this->tags = $arguments[1];
+                $this->categorie = $arguments[2];
+                $this->enseignant = $arguments[3];
             }
-
         }
     }
 
 
 
-    public function setId(int $id):void
+    public function setId(int $id): void
     {
-        $this->id=$id;
+        $this->id = $id;
     }
 
-    public function setTitre(string $titre):void
+    public function setTitre(string $titre): void
     {
-        $this->titre=$titre;
+        $this->titre = $titre;
     }
 
-    public function setDescription(string $description):void
+    public function setDescription(string $description): void
     {
-        $this->description=$description;
+        $this->description = $description;
     }
 
-    public function setContenue(string $contenu):void
+    public function setContenu(string $contenu): void
     {
-        $this->contenu=$contenu;
+        $this->contenu = $contenu;
     }
 
-    public function setCategorie(Categorie $categorie):void
+    public function setCategorie(Categorie $categorie): void
     {
-        $this->categorie=$categorie;
+        $this->categorie = $categorie;
     }
 
-    public function setTags(array $tags):void
+    public function setTags(array $tags): void
     {
-        $this->tags=$tags;
+        $this->tags = $tags;
     }
 
-    public function setEtudiants(array $etudiants):void
+    public function setEtudiants(array $etudiants): void
     {
-        $this->etudiants=$etudiants;
+        $this->etudiants = $etudiants;
     }
 
-    public function setEnseignant(User $enseignant):void
+    public function setEnseignant(User $enseignant): void
     {
-        $this->enseignant=$enseignant;
+        $this->enseignant = $enseignant;
     }
-    public function setPhoto(string $photo){
-        $this->photo=$photo;
+    public function setPhoto(string $photo)
+    {
+        $this->photo = $photo;
     }
 
 
-    public function getId():int
+    public function getId(): int
     {
         return $this->id;
     }
 
 
-    public function getTitre():string
+    public function getTitre(): string
     {
         return $this->titre;
     }
 
-    public function getDescription():string
+    public function getDescription(): string
     {
-       return $this->description;
+        return $this->description;
     }
 
-    public function getContenue():string
+    public function getContenue(): string
     {
         return $this->contenu;
     }
 
-    public function getCategorie():Categorie
+    public function getCategorie(): Categorie
     {
         return $this->categorie;
     }
 
-    public function getTags():array
+    public function getTags(): array
     {
         return $this->tags;
     }
 
-    public function getEtudiants():array
+    public function getEtudiants(): array
     {
         return $this->etudiants;
     }
 
-    public function getEnseignant():User
+    public function getEnseignant(): User
     {
-       return $this->enseignant;
+        return $this->enseignant;
     }
 
 
-    public function __toString()
+    // public function __toString()
+    // {
+    //     return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
+    //            " , photo : " .$this->photo . " , description : ".$this->description . 
+    //            " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
+    //            " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
+    // }
+
+
+
+    public function create()
     {
-        return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
-                " , photo : " .$this->photo . " , description : ".$this->description . 
-                " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
-                " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
+
+        $enseignant = $this->getEnseignant()->getId();
+
+        $query = "insert into courses (titre , photo , description,  contenu , categorie_id , enseignant_id ) values (?,?,?,?,?,?)";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $cate = $this->categorie->searchByName($this->categorie->getname());
+        if ($stmt->execute([$this->titre, $this->photo, $this->description, $this->contenu, $cate->getId(), $enseignant])) {
+            $id = Database::getInstance()->getConnection()->lastInsertId();
+            foreach ($this->tags as $tag) {
+                $tagId = $tag->getId();
+
+                $query1 = "insert into course_tags (cours_id , tag_id ) values (? , ? )";
+                $stmt = Database::getInstance()->getConnection()->prepare($query1);
+                $stmt->execute([$id, $tagId]);
+            }
+        }
+
+        return true;
     }
 
+    public function getAll()
+    {
 
-
-    public function create(){
-
-        $cate = $this->categorie->searchByName($this->categorie->getname());
-        var_dump($cate->getId());
-        $enseignant=$this->getEnseignant()->getId();
-
-        $query="insert into courses (titre , photo , description,  contenu , categorie_id , enseignant_id ) values (?,?,?,?,?,?)";
-        $stmt=Database::getInstance()->getConnection()->prepare($query);
-       // $ens=$this->enseignant->getId();
-        $cate = $this->categorie->searchByName($this->categorie->getname());
-         $cate->getId();
-         $stmt->execute([$this->titre , $this->photo , $this->description , $this->contenu ,$cate->getId(), $enseignant ]);
-
-
-
-    }
-
-    public function getAll(){
-
-        $query='select c.*, u.nom, cat.name as catName FROM courses c join users u on c.enseignant_id=u.id join categories cat on c.categorie_id=cat.id';
-        $stmt=Database::getInstance()->getConnection()->prepare($query);
+        $query = 'select c.*, u.nom, cat.name as catName FROM courses c join users u on c.enseignant_id=u.id join categories cat on c.categorie_id=cat.id';
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
         $stmt->execute();
-        $cours=$stmt->fetchAll(PDO::FETCH_OBJ);
-     
-        foreach($cours as $cour):
-        $sql2="select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
-        $stmt=Database::getInstance()->getConnection()->prepare($sql2);
-        $stmt->bindParam(':id',$cour->id);
-        $stmt->execute();
-        $cour->Tags=($stmt->fetchAll(PDO::FETCH_OBJ));
+        $cours = $stmt->fetchAll(PDO::FETCH_CLASS, Cours::class);
+
+
+        foreach ($cours as $cour):
+            $sql = "select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
+            $stmt = Database::getInstance()->getConnection()->prepare($sql);
+            $stmt->bindParam(':id', $cour->id);
+            $stmt->execute();
+            $cour->tags = $stmt->fetchAll(PDO::FETCH_CLASS, Tag::class);
         endforeach;
-        return $cours;
-        
 
+        // var_dump($cours);
+        // die();
+        return $cours;
     }
 
 
-     public function getMyCours($id){
+    public function getMyCours($id)
+    {
 
-            $query = 'select courses.*,categories.name from courses join categories on categories.id = courses.categories_id where courses.enseignant_id=:id';
-            $stmt=Database::getInstance()->getConnection()->prepare($query);
-            $stmt->bindParam(':id',$id);
-             $stmt->execute();
-             return $stmt->fetchAll(PDO::FETCH_OBJ);
-
-
-
-     }
+        $query = 'select courses.*,categories.name from courses join categories on categories.id = courses.categories_id where courses.enseignant_id=:id';
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
 
 
+    public function delete($id)
+    {
+
+        $query = "delete from courses where id =:id";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 
 
+
+
+    public function getCoursCount()
+    {
+        $query = "select count(*) as coursCount from courses";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $result;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>

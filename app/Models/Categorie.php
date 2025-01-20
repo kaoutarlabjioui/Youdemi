@@ -24,10 +24,10 @@ class Categorie extends Label
 
 
     public function display(){
-        $query = "select name , description FROM categories ";
+        $query = "select id , name , description FROM categories ";
         $stmt =  Database::getInstance()->getConnection()->prepare($query);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS , Categorie::class);
         if($result){
             return $result;
         }
@@ -36,26 +36,28 @@ class Categorie extends Label
 
 
   public function create(){
-        $tagnom = $this->getName();
-        $query = 'insert into categories (name) VALUES (name = :name)';
+
+        $query = "insert into categories (name , description) VALUES ( ?,?)";
         $stmt = Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':name',$tagnom);
-        $stmt->execute();
-        if($stmt){
-            return true;
-        }
+        // $stmt->bindParam(':name',$this->name);
+        // $stmt->bindParam(':description',$this->description);
+        $result= $stmt->execute( [$this->name, $this->description]);
+        // var_dump($result);
+        // exit();
+        return $result;
+        
    }
 
    public function update(){
 
-        $upid=$this->getId();
+        $id=$this->getId();
         $upname = $this->getNAme();
         $updescription = $this->getDescription();
         $query = "update categories set name = :name , description = :description where id= :id";
         $stmt =  Database::getInstance()->getConnection()->prepare($query);
-        $stmt->bindParam(':id',$upid);
-        $stmt->bindParam(':id',$upname);
-        $stmt->bindParam(':id',$updescription);
+        $stmt->bindParam(':id',$id);
+        $stmt->bindParam(':name',$upname);
+        $stmt->bindParam(':description',$updescription);
         $result=  $stmt->execute();
 
         if($result){
@@ -66,8 +68,8 @@ class Categorie extends Label
     }
 
 
-   public function delete() {
-    $deleteid=$this->getId();
+   public function delete($deleteid) {
+    
     $query = "delete from categories where id= :id";
     $stmt =  Database::getInstance()->getConnection()->prepare($query);
     $stmt->bindParam(':id',$deleteid);
@@ -85,6 +87,29 @@ class Categorie extends Label
         return $result;
     }
  }
+
+ public function getById($id){
+    $query = "select id, name , description FROM  categories where id= ? ";
+    $stmt =  Database::getInstance()->getConnection()->prepare($query);
+    // $stmt->bindParam(':name',"%$searchTerm%");
+    $stmt->execute([$id]);
+    $result = $stmt->fetchObject(Categorie::class);
+    if ($result) {
+        return $result;
+    }
+ }
+
+
+ public function getCategorieCount(){
+    $query ="select count(*) as categorieCount from categories";
+    $stmt=Database::getInstance()->getConnection()->prepare($query);
+    $stmt ->execute();
+
+    $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+
+    return $result;
+
+}
 
 
 }
