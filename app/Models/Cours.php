@@ -150,13 +150,24 @@ class Cours
 
     public function create()
     {
+
         $enseignant = $this->getEnseignant()->getId();
 
         $query = "insert into courses (titre , photo , description,  contenu , categorie_id , enseignant_id ) values (?,?,?,?,?,?)";
         $stmt = Database::getInstance()->getConnection()->prepare($query);
-        // $ens=$this->enseignant->getId();
         $cate = $this->categorie->searchByName($this->categorie->getname());
-       return  $stmt->execute([$this->titre, $this->photo, $this->description, $this->contenu, $cate->getId(), $enseignant]);
+        if ($stmt->execute([$this->titre, $this->photo, $this->description, $this->contenu, $cate->getId(), $enseignant])) {
+            $id = Database::getInstance()->getConnection()->lastInsertId();
+            foreach ($this->tags as $tag) {
+                $tagId = $tag->getId();
+
+                $query1 = "insert into course_tags (cours_id , tag_id ) values (? , ? )";
+                $stmt = Database::getInstance()->getConnection()->prepare($query1);
+                $stmt->execute([$id, $tagId]);
+            }
+        }
+
+        return true;
     }
 
     public function getAll()
@@ -166,7 +177,7 @@ class Cours
         $stmt = Database::getInstance()->getConnection()->prepare($query);
         $stmt->execute();
         $cours = $stmt->fetchAll(PDO::FETCH_CLASS, Cours::class);
-       
+
 
         foreach ($cours as $cour):
             $sql = "select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
@@ -205,14 +216,14 @@ class Cours
 
 
 
-    public function getCoursCount(){
-        $query ="select count(*) as coursCount from courses";
-        $stmt=Database::getInstance()->getConnection()->prepare($query);
-        $stmt ->execute();
+    public function getCoursCount()
+    {
+        $query = "select count(*) as coursCount from courses";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt->execute();
 
-        $result= $stmt->fetch(PDO::FETCH_OBJ, User::class );
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
         return $result;
-
     }
 }

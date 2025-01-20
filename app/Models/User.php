@@ -267,18 +267,18 @@ private array $cours=[];
 
 
 
-    // public function inscrireAuCours(Cours $cours) {
-    //     if ($this->role->getRoleName() !== "Etudiant") {
-    //         throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
-    //     }
+    public function inscrireAuCours($id,$idC) {
+        if ($this->role->getRoleName() !== "Etudiant") {
+            throw new Exception("Seuls les étudiants peuvent s'inscrire aux cours");
+        }
 
-    //     $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
+        $query=" INSERT INTO inscriptions (user_id, cours_id) VALUES (?, ?)";
 
-    //     $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
        
-    //     return $stmt->execute([$this->id, $cours->getId()]);
+        return $stmt->execute([$id, $idC]);
 
-    // }
+    }
 
 
     public function getUserCount(){

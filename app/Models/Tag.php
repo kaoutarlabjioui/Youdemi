@@ -22,7 +22,7 @@ class Tag extends Label
         $query = "select id, name , description FROM tags ";
         $stmt =  Database::getInstance()->getConnection()->prepare($query);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS , Tag::class);
        return $result;
     
        }

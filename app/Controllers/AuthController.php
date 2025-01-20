@@ -69,7 +69,7 @@ class AuthController
     public function login()
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == strtolower('POST')  &&  $_POST['submit'] == 'login') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'  &&  $_POST['submit'] == 'login') {
             $email = htmlspecialchars($_POST['email']);
             $password = htmlspecialchars($_POST['password']);
             $errors = [];
@@ -95,7 +95,7 @@ class AuthController
                     $_SESSION['role'] = $user->getRole();
                     $_SESSION['user_id'] = $user->getId();
                     $_SESSION['user'] = $user;
-                    
+
                     include './../app/Views/AdmineDashboard.php';
                 }
             }

@@ -18,35 +18,35 @@
         <tbody>
             <?php foreach ($tags as $tagModel): ?>
                 <tr>
-                    <td><?= $tagModel->name ?></td>
-                    <td><?= $tagModel->description ?></td>
+                    <td><?= $tagModel->getName() ?></td>
+                    <td><?= $tagModel->getDescription() ?></td>
                     <td>
                        
-                        <a  type="button" onclick="openModal('tagModal_<?= $tagModel->id ?>')" class="action-btn">
+                        <a  type="button" onclick="openModal('tagModal_<?= $tagModel->getId() ?>')" class="action-btn">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="/Tags/delete/<?= $tagModel->id ?>" type="button" class="action-btn">
+                        <a href="/Tags/delete/<?= $tagModel->getId() ?>" type="button" class="action-btn">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
 
               
-                <div id="tagModal_<?= $tagModel->id ?>" class="modal">
+                <div id="tagModal_<?= $tagModel->getId() ?>" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h2 class="modal-title">Editer tag</h2>
-                            <button type="button" class="close-modal" onclick="closeModal('tagModal_<?= $tagModel->id ?>')">&times;</button>
+                            <button type="button" class="close-modal" onclick="closeModal('tagModal_<?= $tagModel->getId() ?>')">&times;</button>
                         </div>
-                        <form action="/Tags/update/<?= $tagModel->id ?>" method="POST">
-                           <input type="hidden" name="id" value="<?= $tagModel->id ?>" />
+                        <form action="/Tags/update/<?= $tagModel->getId() ?>" method="POST">
+                           <input type="hidden" name="id" value="<?= $tagModel->getId()?>" />
                             <div class="form-group">
                                 <label class="form-label">Nom du tag</label>
-                                <input type="text" name="name" class="form-input" value="<?= $tagModel->name ?>" placeholder="Entrez le nom du tag">
+                                <input type="text" name="name" class="form-input" value="<?= $tagModel->getName() ?>" placeholder="Entrez le nom du tag">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Description</label>
-                                <textarea class="form-input" name="description" rows="3" placeholder="Description du tag"><?= $tagModel->description ?></textarea>
+                                <textarea class="form-input" name="description" rows="3" placeholder="Description du tag"><?= $tagModel->getDescription() ?></textarea>
                             </div>
                             <button type="submit" name="submit" class="form-submit">Mettre à jour</button>
                         </form>

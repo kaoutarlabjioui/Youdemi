@@ -18,6 +18,10 @@ class TagsController
 
 
 
+
+
+
+
     public function display()
     {
         $tags = $this->tagModel->display();
@@ -27,42 +31,38 @@ class TagsController
     }
 
 
-    public function add(){
-        if(isset($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['description'])){
-          
-             $this->tagModel->setName($_POST['name']);
-             $this->tagModel->setDescription($_POST['description']);
-            $result= $this->tagModel->create();
-        
-        
-             if ($result) {
+    public function add()
+    {
+        if (isset($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['description'])) {
+
+            $this->tagModel->setName($_POST['name']);
+            $this->tagModel->setDescription($_POST['description']);
+            $result = $this->tagModel->create();
+
+
+            if ($result) {
 
                 header('Location: ../Tags/display');
                 exit();
             } else {
-               
+
                 echo "Erreur lors de l'ajout du tag.";
             }
-        
-        
         }
-        
-        
-        }
+    }
 
 
 
-        public function update()
+    public function update()
     {
         if ($_SERVER["REQUEST_METHOD"]) {
 
             $this->tagModel->setName($_POST['name']);
-            
+
             $this->tagModel->setDescription($_POST['description']);
             $this->tagModel->setId($_POST['id']);
             $this->tagModel->update();
-            header('location:../');
-          
+            header('location: /Tags/display');
         }
     }
 
@@ -72,15 +72,14 @@ class TagsController
 
 
 
-    public function delete($id){
-        $delete=$this->tagModel->delete($id);
-        
-       if ($delete)
-        {
-           
+    public function delete($id)
+    {
+        $delete = $this->tagModel->delete($id);
+
+        if ($delete) {
+
             header('Location:../../');
             exit();
         }
-
     }
 }
