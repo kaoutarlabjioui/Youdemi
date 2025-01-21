@@ -112,7 +112,7 @@ class Cours
         return $this->description;
     }
 
-    public function getContenue(): string
+    public function getContenu(): string
     {
         return $this->contenu;
     }
@@ -138,13 +138,13 @@ class Cours
     }
 
 
-    // public function __toString()
-    // {
-    //     return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
-    //            " , photo : " .$this->photo . " , description : ".$this->description . 
-    //            " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
-    //            " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
-    // }
+    public function __toString()
+    {
+        return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
+               " , photo : " .$this->photo . " , description : ".$this->description . 
+               " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
+               " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
+    }
 
 
 
@@ -196,11 +196,24 @@ class Cours
     public function getMyCours($id)
     {
 
-        $query = 'select courses.*,categories.name from courses join categories on categories.id = courses.categories_id where courses.enseignant_id=:id';
+        $query = 'select c.*, u.nom, cat.name as catName FROM courses c join users u on c.enseignant_id=u.id join categories cat on c.categorie_id=cat.id where u.id=:id';
         $stmt = Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        $cours = $stmt->fetchAll(PDO::FETCH_CLASS, Cours::class);
+
+
+        foreach ($cours as $cour):
+            $sql = "select t.* from tags t join course_tags c on t.id=c.tag_id where c.cours_id=:id";
+            $stmt = Database::getInstance()->getConnection()->prepare($sql);
+            $stmt->bindParam(':id', $cour->id);
+            $stmt->execute();
+            $cour->tags = $stmt->fetchAll(PDO::FETCH_CLASS, Tag::class);
+        endforeach;
+
+        // var_dump($cours);
+        // die();
+        return $cours;
     }
 
 
@@ -226,4 +239,17 @@ class Cours
 
         return $result;
     }
+
+    public function getInscritCours($id){
+
+        $query = "select c.* , cat.name as catName , u.nom from courses c join inscriptions ins on c.id= ins.cours_id join categories cat on cat.id = c.categorie_id join users u on  c.enseignant_id = u.id where ins.etudiant_id=:id";
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt->bindParam(':id',$id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, Cours::class);
+        // var_dump($id);
+        return $result;
+    }
+
+   
 }

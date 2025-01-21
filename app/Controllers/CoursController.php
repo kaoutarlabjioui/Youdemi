@@ -5,6 +5,7 @@ namespace app\Controllers;
 use app\Models\Cours;
 use app\Models\Categorie;
 use app\Models\Tag;
+use app\Models\User;
 
 class CoursController
 {
@@ -12,10 +13,11 @@ class CoursController
     private Cours $coursModel;
     private Categorie $categories;
     private Tag $tags;
-
+    private $userModel;
 
     public function __construct()
     {
+        $this->userModel = new User ();
         $this->coursModel = new Cours();
         $this->categories = new Categorie();
         $this->tags = new Tag();
@@ -24,16 +26,46 @@ class CoursController
 
     public function index()
     {
+        if (!isset($_SESSION['user'])) {
+            include '../app/Views/Home.php';
+        }else{
+            $role=$_SESSION['role'];
+            $categories = $this->categories->display();
+            $tags = $this->tags->display();
+            $test=explode('/',$_SERVER['PHP_SELF']);
+            include '../app/Views/AdmineDashboard.php';
+            switch ($role->getId()) {
+                case 1:
+                    $cours = $this->coursModel->getAll();
 
-        $cours = $this->coursModel->getAll();
-        $categories = $this->categories->display();
-        $tags = $this->tags->display();
+                    include '../app/Views/layout/Cours/CoursTable.php';
+                    break;
+
+                case 2:
+                    $cours = $this->coursModel->getMyCours($_SESSION['user_id']);
+                    include '../app/Views/layout/Cours/CoursTable.php';
+
+                    break;
+                case 3:
+                    $cours = $this->coursModel->getInscritCours($_SESSION['user_id']);
+                    include '../app/Views/layout/Cours/CoursTable.php';
+                    break;
+            }
+
+
+
+
+
+        // $cours = $this->coursModel->getAll();
+        // $categories = $this->categories->display();
+        // $tags = $this->tags->display();
         // var_dump($tags[0]->getId());
         // die();
         // $role=$_SESSION["role"];
-        include '../app/Views/AdmineDashboard.php';
-        include '../app/Views/layout/Cours/CoursTable.php';
+        // include '../app/Views/AdmineDashboard.php';
+        // include '../app/Views/layout/Cours/CoursTable.php';
         //   
+        }
     }
 
 
@@ -97,8 +129,17 @@ class CoursController
 
         if ($delete) {
 
-            header('Location:../../');
+            header('Location:../');
             exit();
+        }
+    }
+
+    public function apply($id){
+        $test=$this->userModel->inscrireAuCours($_SESSION['user_id'],$id);
+        if ($test) {
+            header('location: /');
+        }else{
+            var_dump($test);
         }
     }
 }

@@ -1,3 +1,7 @@
+<?php
+include "../app/Views/layout/stats.php";
+
+?>
 <?php include 'UserModal.php' ?>
 <div class="table-container">
             <div class="table-header">

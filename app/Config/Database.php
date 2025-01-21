@@ -39,9 +39,9 @@ class Database {
             return self::$instance ;
         }
 
-        public function getConnection(){
-            return self::$connexion;
-        }
+    public function getConnection(){
+        return self::$connexion;
+    }
 
 
 

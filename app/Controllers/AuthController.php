@@ -32,7 +32,7 @@ class AuthController
 
             if (empty($nom) || empty($prenom) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-                $errors['general'] = "Veuillez remplir tous les champs correctement.";
+              echo  $errors['general'] = "Veuillez remplir tous les champs correctement.";
             }
 
 
@@ -96,11 +96,11 @@ class AuthController
                     $_SESSION['user_id'] = $user->getId();
                     $_SESSION['user'] = $user;
 
-                    include './../app/Views/AdmineDashboard.php';
+                    header('location:/');
                 }
             }
         } else {
-
+            unset($_POST);
             include_once('../app/Views/Login.php');
         }
     }
@@ -111,7 +111,7 @@ class AuthController
         session_unset();
         session_destroy();
 
-        header('location: /cours/getAll');
+        header('location: /');
 
         exit();
     }

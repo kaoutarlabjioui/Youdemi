@@ -196,7 +196,7 @@
         </div>
 
         <div class="buttons-container">
-            <a href="./Home" class="btn btn-primary">
+            <a href="./User" class="btn btn-primary">
                 <i class="fas fa-home"></i>
                 Retour à l'accueil
             </a>

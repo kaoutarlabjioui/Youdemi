@@ -17,10 +17,10 @@ class Categorie extends Label
         parent::__call($name, $arguments);
     }
 
-    // public function __toString(): string
-    // {
-    //     return parent::__toString();
-    // }
+    public function __toString(): string
+    {
+        return parent::__toString();
+    }
 
 
     public function display(){
@@ -31,7 +31,7 @@ class Categorie extends Label
         if($result){
             return $result;
         }
-    
+
        }
 
 
@@ -39,13 +39,9 @@ class Categorie extends Label
 
         $query = "insert into categories (name , description) VALUES ( ?,?)";
         $stmt = Database::getInstance()->getConnection()->prepare($query);
-        // $stmt->bindParam(':name',$this->name);
-        // $stmt->bindParam(':description',$this->description);
         $result= $stmt->execute( [$this->name, $this->description]);
-        // var_dump($result);
-        // exit();
         return $result;
-        
+
    }
 
    public function update(){
@@ -69,7 +65,6 @@ class Categorie extends Label
 
 
    public function delete($deleteid) {
-    
     $query = "delete from categories where id= :id";
     $stmt =  Database::getInstance()->getConnection()->prepare($query);
     $stmt->bindParam(':id',$deleteid);
@@ -80,7 +75,6 @@ class Categorie extends Label
  public function searchByName($searchTerm) {
     $query = "select id, name , description FROM  categories where name like ? ";
     $stmt =  Database::getInstance()->getConnection()->prepare($query);
-    // $stmt->bindParam(':name',"%$searchTerm%");
     $stmt->execute(["%$searchTerm%"]);
     $result = $stmt->fetchObject(Categorie::class);
     if ($result) {
@@ -91,7 +85,6 @@ class Categorie extends Label
  public function getById($id){
     $query = "select id, name , description FROM  categories where id= ? ";
     $stmt =  Database::getInstance()->getConnection()->prepare($query);
-    // $stmt->bindParam(':name',"%$searchTerm%");
     $stmt->execute([$id]);
     $result = $stmt->fetchObject(Categorie::class);
     if ($result) {
