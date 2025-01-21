@@ -138,13 +138,13 @@ class Cours
     }
 
 
-    // public function __toString()
-    // {
-    //     return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
-    //            " , photo : " .$this->photo . " , description : ".$this->description . 
-    //            " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
-    //            " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
-    // }
+    public function __toString()
+    {
+        return "(cours) => id :  " .$this->id . " , titre : ".$this->titre . 
+               " , photo : " .$this->photo . " , description : ".$this->description . 
+               " , contenu : " . $this->contenu . " ,categorie : " .$this->categorie . 
+               " , tags : " .$this->tags . " , etudiants : ".$this->etudiants . " , enseignant : ".$this->enseignant. "." ;
+    }
 
 
 

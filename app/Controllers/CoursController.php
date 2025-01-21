@@ -37,18 +37,17 @@ class CoursController
             switch ($role->getId()) {
                 case 1:
                     $cours = $this->coursModel->getAll();
-                   
+
                     include '../app/Views/layout/Cours/CoursTable.php';
                     break;
 
                 case 2:
                     $cours = $this->coursModel->getMyCours($_SESSION['user_id']);
                     include '../app/Views/layout/Cours/CoursTable.php';
-                    
+
                     break;
                 case 3:
                     $cours = $this->coursModel->getInscritCours($_SESSION['user_id']);
-                    
                     include '../app/Views/layout/Cours/CoursTable.php';
                     break;
             }

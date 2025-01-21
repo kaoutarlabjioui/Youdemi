@@ -50,11 +50,6 @@ class UserController{
                 include '../app/Views/layout/Cours/CoursTable.php';
                     break;
             }
-            
-            // include '../app/Views/layout/Admin/UsersTable.php';
-           
-            // include '../app/Views/AdmineDashboard.php';
-            // include '../app/Views/layout/Admin/UsersTable.php';
         }
 
     }
@@ -68,12 +63,6 @@ class UserController{
         }
     }
 
-
-//    public function statistics(){
-//     $userCount = $this->userModel->getUserCount();
-//     include '../app/Views/layout/stats.php';
-//     include '../app/Views/AdmineDashboard.php';
-//    }
 
     public function  delete($id){
       $result=  $this->userModel->delete($id);

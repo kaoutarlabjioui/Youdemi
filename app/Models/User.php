@@ -139,12 +139,12 @@ private array $cours=[];
 
 
 
-//     public function __toString()
-//    {
-//         return "(Utilisateur) => id : " . $this->id . " , nom : " . $this->nom . 
-//                 " , prenom : " . $this->prenom ." , email : " . $this->email  . 
-//                 " , password : " . $this->password .  " , role : " .$this->role . "." ;
-//     }
+    public function __toString()
+   {
+        return "(Utilisateur) => id : " . $this->id . " , nom : " . $this->nom . 
+                " , prenom : " . $this->prenom ." , email : " . $this->email  . 
+                " , password : " . $this->password .  " , role : " .$this->role . "." ;
+    }
 
     public function display(){
 
@@ -200,17 +200,15 @@ private array $cours=[];
         $stmt=Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':id',$fid );
         return  $stmt->execute();
-    
-      
+
     }
 
 
     public function create()
-    {try{
-        // $roleId = $this->role ? $this->role->getId() : null;
+    {
+
         $id=$this->role->getId() ;
         $query="insert into users (nom,prenom,email,password,role_id) values (:nom,:prenom,:email,:password,:role_id)";
-        // $hashedPassword = password_hash($this->password,PASSWORD_DEFAULT);
         $stmt= Database::getInstance()->getConnection()->prepare($query);
         $stmt->bindParam(':nom',$this->nom);
         $stmt->bindParam(':prenom',$this->prenom);
@@ -218,10 +216,6 @@ private array $cours=[];
         $stmt->bindParam(':password',$this->password);
         $stmt->bindParam(':role_id', $id);
        return $stmt->execute();
-        }catch(Exception $e){
-            return "kawtar ";
-        }
-
     }
 
 
@@ -243,7 +237,7 @@ private array $cours=[];
     
     public function updateStatus($ids){
         $query="update users set status='active' where id=?";
-         $stmt = Database::getInstance()->getConnection()->prepare($query);
+        $stmt = Database::getInstance()->getConnection()->prepare($query);
          return $stmt->execute([$ids]);
     
         

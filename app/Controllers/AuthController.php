@@ -32,7 +32,7 @@ class AuthController
 
             if (empty($nom) || empty($prenom) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-                $errors['general'] = "Veuillez remplir tous les champs correctement.";
+              echo  $errors['general'] = "Veuillez remplir tous les champs correctement.";
             }
 
 
